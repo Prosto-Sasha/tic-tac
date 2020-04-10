@@ -19,6 +19,13 @@ def check_win(mas, sign):
     return False
 
 
+def intel(mas):
+    for col in range(3):
+        if mas[0][col] == 'x' and mas[1][col] == 'x':
+            return 2, col
+    return random.randint(0, 2), random.randint(0, 2)
+
+
 pygame.init()
 
 size_block = 100
@@ -43,15 +50,18 @@ while True:
             pygame.quit()
             sys.exit(0)
         elif event.type == pygame.MOUSEBUTTONDOWN and not game_over:
-            x_mouse, y_mouse = pygame.mouse.get_pos()
-            col = x_mouse // (size_block + margin)
-            row = y_mouse // (size_block + margin)
-            if mas[row][col] == 0:
-                if query % 2 == 0:
-                    mas[row][col] = 'x'
-                else:
-                    mas[row][col] = 'o'
-                query += 1
+            flag = True
+            while flag:
+                x_mouse, y_mouse = pygame.mouse.get_pos()
+                col = x_mouse // (size_block + margin)
+                row = y_mouse // (size_block + margin)
+                if mas[row][col] == 0:
+                    if query % 2 == 0:
+                        mas[row][col] = 'x'
+                        query += 2
+                        flag = False
+                x, y = intel(mas)
+                mas[x][y] = 'o'
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
             game_over = False
             mas = [[0] * 3 for i in range(3)]

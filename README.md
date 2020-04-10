@@ -1,2 +1,2 @@
 # tic-tac_game
- + | o
+ + x | o
