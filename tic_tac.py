@@ -21,9 +21,51 @@ def check_win(mas, sign):
 
 def intel(mas):
     for col in range(3):
-        if mas[0][col] == 'x' and mas[1][col] == 'x':
-            return 2, col
-    return random.randint(0, 2), random.randint(0, 2)
+        if (mas[1][col] == 'x' and mas[2][col] == 'x') or (mas[1][col] == 'o' and mas[2][col] == 'o'):
+            if mas[0][col] == 0:
+                return 0, col
+        if (mas[0][col] == 'x' and mas[2][col] == 'x') or (mas[0][col] == 'o' and mas[2][col] == 'o'):
+            if mas[1][col] == 0:
+                return 1, col
+        if (mas[0][col] == 'x' and mas[1][col] == 'x') or (mas[0][col] == 'o' and mas[1][col] == 'o'):
+            if mas[2][col] == 0:
+                return 2, col
+
+    for row in range(3):
+        if (mas[row][1] == 'x' and mas[row][2] == 'x') or (mas[row][1] == 'o' and mas[row][2] == 'o'):
+            if mas[row][0] == 0:
+                return row, 0
+        if (mas[row][0] == 'x' and mas[row][2] == 'x') or (mas[row][0] == 'o' and mas[row][2] == 'o'):
+            if mas[row][1] == 0:
+                return row, 1
+        if (mas[row][0] == 'x' and mas[row][1] == 'x') or (mas[row][0] == 'o' and mas[row][1] == 'o'):
+            if mas[row][2] == 0:
+                return row, 2
+
+    if (mas[1][1] == 'x' and mas[2][2] == 'x') or (mas[1][1] == 'o' and mas[2][2] == 'o'):
+        if mas[0][0] == 0:
+            return 0, 0
+    if (mas[0][0] == 'x' and mas[2][2] == 'x') or (mas[0][0] == 'o' and mas[2][2] == 'o'):
+        if mas[1][1] == 0:
+            return 1, 1
+    if (mas[0][0] == 'x' and mas[1][1] == 'x') or (mas[0][0] == 'o' and mas[1][1] == 'o'):
+        if mas[2][2] == 0:
+            return 2, 2
+
+    if (mas[2][0] == 'x' and mas[1][1] == 'x') or (mas[2][0] == 'o' and mas[1][1] == 'o'):
+        if mas[0][2] == 0:
+            return 0, 2
+    if (mas[0][2] == 'x' and mas[2][0] == 'x') or (mas[0][2] == 'o' and mas[2][0] == 'o'):
+        if mas[1][1] == 0:
+            return 1, 1
+    if (mas[0][2] == 'x' and mas[1][1] == 'x') or (mas[0][2] == 'o' and mas[1][1] == 'o'):
+        if mas[2][0] == 0:
+            return 2, 0
+
+    x, y = random.randint(0, 2), random.randint(0, 2)
+    while mas[x][y] != 0:
+        x, y = random.randint(0, 2), random.randint(0, 2)
+    return x, y
 
 
 pygame.init()
@@ -57,11 +99,11 @@ while True:
                 row = y_mouse // (size_block + margin)
                 if mas[row][col] == 0:
                     if query % 2 == 0:
-                        mas[row][col] = 'x'
+                        mas[row][col] = 'o'
                         query += 2
                         flag = False
                 x, y = intel(mas)
-                mas[x][y] = 'o'
+                mas[x][y] = 'x'
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
             game_over = False
             mas = [[0] * 3 for i in range(3)]
@@ -83,8 +125,8 @@ while True:
                     pygame.draw.line(screen, black, (x + 5, y + 5), (x + size_block - 5, y + size_block - 5), 3)
                     pygame.draw.line(screen, black, (x + size_block - 5, y + 5), (x + 5, y + size_block - 5), 3)
                 elif color == green:
-                    pygame.draw.circle(screen, white, (x + size_block // 2, y + size_block // 2), size_block // 2 - 3,
-                                       3)
+                    pygame.draw.circle(screen, white, (x + size_block // 2, y + size_block // 2),
+                                       size_block // 2 - 3, 3)
 
     if (query - 1) % 2 == 0:
         game_over = check_win(mas, 'x')
